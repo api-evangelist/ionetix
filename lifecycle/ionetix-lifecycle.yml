@@ -1,0 +1,56 @@
+generated: '2026-08-23'
+method: searched
+source: >-
+  https://ionetix.com/ site crawl (29 pages enumerated via the WordPress pages collection),
+  https://ionetix.com/wp-json/ route index, probes on 2026-08-23
+versioning:
+  scheme: uri-path-namespace
+  current: wp/v2
+  docs: null
+  note: >-
+    The version is WordPress core's namespace version, not an Ionetix product version. Ionetix has never
+    versioned anything here because it does not consider this an API. wp/v2 has been stable since 2016
+    and moves only when WordPress core moves.
+  other_namespaces_registered:
+  - oembed/1.0
+  - wp-abilities/v1
+  - wp-site-health/v1
+  - wp-block-editor/v1
+  - batch/v1
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  evidence: >-
+    No Sunset or Deprecation response header observed on any wp/v2 route; no deprecation policy page
+    exists on ionetix.com. No Deprecation pointer is emitted.
+deprecated_operations: []
+sla:
+  url: null
+  uptime_target: null
+  published: false
+status_page: null
+status_page_evidence:
+- url: https://ionetix.com/status
+  status: 404
+- url: https://status.ionetix.com/
+  status: dns-nxdomain
+note: >-
+  No StatusPage pointer and no Deprecation pointer are emitted, because neither surface exists. Both
+  checked and both absent — an honest zero, not an unprobed gap.
+change_log:
+  published: false
+  evidence: >-
+    ionetix.com publishes a News & Events stream (https://ionetix.com/news-events/, 66 posts across
+    News, Case Studies, Conferences, Presentations, Publications and Careers categories) but that is
+    corporate news, not a dated record of changes to any interface. There is no API changelog, no
+    release notes page and no versioned artifact to log against, so no ChangeLog pointer is emitted
+    and no changelog/ artifact is written.
+content_currency:
+  most_recent_post: '2026-08-17'
+  most_recent_page_modified: '2026-08-18'
+  posts_total: 66
+  pages_total: 29
+  media_total: 291
+  note: The content surface itself is actively maintained; only the interface around it is unmanaged.

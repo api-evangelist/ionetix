@@ -1,0 +1,41 @@
+generated: '2026-08-23'
+method: generated
+source: >-
+  openapi/ionetix-*-api-openapi.yml — every operationId referenced below was grepped out of those specs,
+  which were themselves derived verbatim from the https://ionetix.com/wp-json/ route index
+provider_published_skills: false
+provider_published_skills_evidence: >-
+  No AGENTS.md, no skills/ directory and no agent instructions of any kind exist on ionetix.com or in
+  any public Ionetix repository (github.com/IonetixSF has 0 public repositories). These skills are
+  authored by API Evangelist over the only contract Ionetix serves.
+skills:
+- name: ionetix-track-company-news
+  file: ionetix-track-company-news.md
+  api: ionetix:ionetix-posts-api
+  summary: >-
+    Pull Ionetix financing, FDA/ANDA, partnership, facility and executive news out of the WordPress post
+    stream by category and date window, with correct pagination and _embed expansion.
+  operations: [getWpV2Categories, getWpV2Posts, getWpV2PostsById, getWpV2UsersById, getWpV2MediaById]
+- name: ionetix-map-product-and-site-network
+  file: ionetix-map-product-and-site-network.md
+  api: ionetix:ionetix-pages-api
+  summary: >-
+    Walk the ionetix.com page tree to read the Cardiac PET / N-13 Ammonia, cyclotron, Ac-225, At-211,
+    alpha therapy and PSMA PET product pages and the leadership roster beneath /about/.
+  operations: [getWpV2Pages, getWpV2PagesById, getWpV2Search]
+- name: ionetix-harvest-media-and-datasheets
+  file: ionetix-harvest-media-and-datasheets.md
+  api: ionetix:ionetix-media-api
+  summary: >-
+    Isolate the ION-12SC data sheet PDFs and other technical documents from the 291-item media library
+    and resolve them to direct, unauthenticated URLs.
+  operations: [getWpV2Media, getWpV2MediaById, getWpV2Search]
+shared_rules:
+- Anonymous read only. Every write operation in these specs is authentication-gated and out of scope.
+- 'Pace at >= 3s between requests: robots.txt sets Crawl-delay: 3 and no rate-limit headers exist.'
+- Errors are the WordPress WP_Error envelope, not RFC 9457. See errors/ionetix-problem-types.yml.
+- 'per_page is capped at 100; page with X-WP-Total / X-WP-TotalPages or the Link rel="next" header.'
+- Always send _fields to avoid dragging rendered HTML and Yoast SEO blobs across the wire.
+- >-
+  This is a CMS content API, not a product API. It carries no dose, order, isotope-supply, scheduling
+  or clinical data, and must never be described to a user as if it did.

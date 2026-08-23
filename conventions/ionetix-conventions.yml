@@ -1,0 +1,175 @@
+generated: '2026-08-23'
+method: derived
+source: >-
+  openapi/ionetix-*-api-openapi.yml (derived from https://ionetix.com/wp-json/ route index and per-route
+  HTTP OPTIONS schemas), plus live response headers observed on 2026-08-23
+cross_links:
+  errors: errors/ionetix-problem-types.yml
+  lifecycle: lifecycle/ionetix-lifecycle.yml
+  authentication: authentication/ionetix-authentication.yml
+  rate_limits: rate-limits/ionetix-rate-limits.yml
+  data_model: data-model/ionetix-data-model.yml
+auth:
+  style: http-basic
+  scheme: WordPress Application Passwords over HTTP Basic
+  anonymous_read: true
+  authorization_endpoint: https://ionetix.com/wp-admin/authorize-application.php
+  note: >-
+    Advertised by the route index's `authentication` block. Read access to every wp/v2 content
+    collection profiled here is anonymous; all write access requires the Basic credential.
+idempotency:
+  supported: false
+  header: null
+  scope: null
+  retention: null
+  evidence: >-
+    No Idempotency-Key (or equivalent) parameter is declared on any route in the ionetix.com route
+    index, and no idempotent-retry semantics are documented. A retried POST creates a second resource.
+  pointer_emitted: false
+dry_run_mode:
+  supported: false
+  evidence: No preview/validate-only/dry_run parameter is declared on any write route.
+pagination:
+  style: offset
+  params:
+  - name: page
+    default: 1
+    minimum: 1
+  - name: per_page
+    default: 10
+    minimum: 1
+    maximum: 100
+  - name: offset
+    type: integer
+  response_fields:
+    headers:
+    - X-WP-Total
+    - X-WP-TotalPages
+    link_header: RFC 8288 Link with rel="next" / rel="prev"
+  observed: 'GET /wp/v2/posts?per_page=2 -> X-WP-Total: 66, X-WP-TotalPages: 33, Link rel="next"'
+field_selection:
+  sparse_fields:
+    supported: true
+    param: _fields
+    example: /wp/v2/posts?_fields=id,date,link,title
+  expansion:
+    supported: true
+    param: _embed
+    note: >-
+      _embed inlines the resources referenced from the resource's _links (author, featured media,
+      terms) instead of returning bare integer ids.
+  context:
+    param: context
+    values: [view, embed, edit]
+    default: view
+    note: >-
+      `edit` context returns additional fields but requires authentication; anonymous callers asking
+      for it receive rest_forbidden.
+metadata:
+  supported: true
+  field: meta
+  note: Registered post meta only; ionetix.com registers none that surface anonymously.
+request_id_tracing:
+  supported: false
+  evidence: >-
+    No X-Request-Id / correlation header is returned. The only per-request identifiers observed are
+    Fastly cache diagnostics (x-served-by, x-timer, x-fw-hash), which are edge artifacts, not a
+    provider-issued trace id an agent can quote in a support ticket.
+versioning:
+  style: uri-path-namespace
+  current: wp/v2
+  see: lifecycle/ionetix-lifecycle.yml
+error_envelope:
+  media_type: application/json
+  shape: '{code, message, data:{status}}'
+  rfc9457: false
+  see: errors/ionetix-problem-types.yml
+rate_limit_signaling:
+  headers: []
+  see: rate-limits/ionetix-rate-limits.yml
+caching:
+  supported: true
+  evidence: >-
+    Responses are served through Fastly with x-cacheable: YES and vary: Accept-Encoding, Origin.
+    No ETag or Last-Modified was observed on wp/v2 collection responses, so conditional requests are
+    not available to an agent.
+cors:
+  enabled: true
+  allow_headers: [Authorization, X-WP-Nonce, Content-Disposition, Content-MD5, Content-Type]
+  expose_headers: [X-WP-Total, X-WP-TotalPages, Link]
+reversibility:
+  applicable: true
+  grade: documented
+  grade_basis: >-
+    A reversal path exists and is declared in the contract, but no retention window is stated by
+    Ionetix anywhere, so this is `documented` (0.4) and not `verified` (1.0). WordPress core's default
+    trash retention is 30 days, but that is a WordPress default that any site owner can change or
+    disable in wp-config.php, and Ionetix publishes nothing about its setting. Asserting 30 days here
+    would be inventing a window the provider has not stated.
+  write_surfaces:
+  - surface: Posts
+    destructive_operation: deleteWpV2PostsById
+    spec: openapi/ionetix-posts-api-openapi.yml
+    reversal: >-
+      DELETE /wp/v2/posts/{id} without force=true does not delete; it sets the post status to `trash`,
+      from which it is restored by POST /wp/v2/posts/{id} with status set back to publish or draft.
+    reversal_operation: postWpV2PostsById
+    irreversible_when: >-
+      force=true. The route index declares this parameter verbatim as "Whether to bypass Trash and
+      force deletion." — with force=true the row is destroyed and there is no reversal path.
+    window: null
+    window_docs: null
+  - surface: Pages
+    destructive_operation: deleteWpV2PagesById
+    spec: openapi/ionetix-pages-api-openapi.yml
+    reversal: Same trash/restore semantics as Posts.
+    reversal_operation: postWpV2PagesById
+    irreversible_when: force=true bypasses Trash.
+    window: null
+    window_docs: null
+  - surface: Comments
+    destructive_operation: deleteWpV2CommentsById
+    spec: openapi/ionetix-comments-api-openapi.yml
+    reversal: >-
+      DELETE without force=true sets the comment status to `trash`; restored by POST with status
+      approve/hold.
+    reversal_operation: postWpV2CommentsById
+    irreversible_when: force=true bypasses Trash.
+    window: null
+    window_docs: null
+  - surface: Media
+    destructive_operation: deleteWpV2MediaById
+    spec: openapi/ionetix-media-api-openapi.yml
+    reversal: unknown
+    irreversible: likely
+    note: >-
+      The ionetix.com route index declares DELETE /wp/v2/media/{id} with the same `force` parameter
+      wording as posts ("Whether to bypass Trash and force deletion.", boolean, default false), so on
+      the declared contract alone a soft delete looks available. It is not: WordPress core has no trash
+      state for attachments and its attachment controller rejects a non-forced delete. That behaviour is
+      WordPress core's, not something Ionetix declares or documents, so it is recorded here as a
+      contract/behaviour divergence rather than asserted as fact. An agent should treat media deletion
+      as one-way until it has confirmed otherwise against this specific site.
+    window: null
+    window_docs: null
+  - surface: Taxonomy (categories, tags)
+    destructive_operation: deleteWpV2CategoriesById / deleteWpV2TagsById
+    spec: openapi/ionetix-taxonomy-api-openapi.yml
+    reversal: none
+    irreversible: true
+    note: >-
+      Declared verbatim in the ionetix.com route index on the `force` parameter: "Required to be true,
+      as terms do not support trashing." Deleting a term is irreversible and unassigns it from every
+      post that carried it. This is the one surface here whose irreversibility the contract itself states.
+    window: null
+    window_docs: null
+  read_only: false
+  note: >-
+    Every write surface above is authentication-gated, so none of it is reachable by an anonymous agent.
+    The reversibility record exists so that a credentialed agent knows, before it acts, which of these
+    deletions it can take back (posts, pages, comments — via Trash) and which it cannot (taxonomy
+    terms, stated in the contract; media, by undeclared WordPress core behaviour).
+note: >-
+  These are WordPress core conventions as configured on ionetix.com, not conventions Ionetix designed
+  or documents. They are recorded here because they are nonetheless the real, observable contract any
+  agent calling ionetix.com will meet.

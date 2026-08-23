@@ -1,0 +1,48 @@
+generated: '2026-08-23'
+method: searched
+source: >-
+  registry.npmjs.org search + package metadata; pypi.org; api.github.com user/repo enumeration;
+  ionetix.com site search
+packages:
+- language: javascript
+  registry: npm
+  name: ionetix-clinical-apps-deploy
+  url: https://www.npmjs.com/package/ionetix-clinical-apps-deploy
+  install: npm install ionetix-clinical-apps-deploy
+  official: true
+  official_basis: >-
+    Sole npm maintainer is tboman@ionetix.com, a first-party ionetix.com address.
+  version: 1.0.1
+  published: '2017-11-14'
+  latest_checked: '2026-08-23'
+  sdk: false
+  kind: installer-placeholder
+  description: >-
+    Published package description states verbatim: "If you are looking for the Ionetix Clinical Apps
+    Suite installer, you need to obtain a token from Ionetix to get a private NPM package. This is the
+    generic public v1.0.1 package."
+  note: >-
+    This is NOT a client SDK for any Ionetix API. It is a public placeholder whose only function is to
+    tell the reader that the real Ionetix Clinical Apps Suite installer is a token-gated private npm
+    package. It has not been republished since 2017-11-14 (registry `time` field), so it is nine years
+    stale, and the private package it points at cannot be inspected without a vendor-issued token.
+    Because no first-party client library exists, no `SDKs` pointer is emitted in apis.yml.
+registries_checked:
+- registry: npm
+  query: ionetix
+  results: 1
+- registry: pypi
+  query: ionetix
+  results: 0
+  status: 404
+- registry: github
+  query: ionetix
+  results: 1
+  detail: >-
+    github.com/IonetixSF exists but is a personal USER account with 0 public repositories, no company
+    field and no linked website, so it is not confirmable as an Ionetix organization. No
+    GitHubOrganization pointer is emitted.
+sdk_count: 0
+note: >-
+  Ionetix publishes no developer platform, so there is no SDK surface to find. The one first-party
+  package on any public registry is an installer stub for a private, token-gated internal product.

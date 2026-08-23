@@ -1,0 +1,44 @@
+{
+ "$schema": "http://json-schema.org/draft-04/schema#",
+ "title": "search-result",
+ "type": "object",
+ "properties": {
+  "id": {
+   "description": "Unique identifier for the object.",
+   "type": [
+    "integer",
+    "string"
+   ]
+  },
+  "title": {
+   "description": "The title for the object.",
+   "type": "string"
+  },
+  "url": {
+   "description": "URL to the object.",
+   "type": "string",
+   "format": "uri"
+  },
+  "type": {
+   "description": "Object type.",
+   "type": "string",
+   "enum": [
+    "post",
+    "term",
+    "post-format"
+   ]
+  },
+  "subtype": {
+   "description": "Object subtype.",
+   "type": "string",
+   "enum": [
+    "post",
+    "page",
+    "category",
+    "post_tag"
+   ]
+  }
+ },
+ "x-source": "HTTP OPTIONS https://ionetix.com/wp-json/wp/v2/search",
+ "x-fetched": "2026-08-23"
+}

@@ -1,0 +1,97 @@
+generated: '2026-08-23'
+method: derived
+source: >-
+  openapi/ionetix-*-api-openapi.yml, well-known/ionetix-well-known.yml,
+  security/ionetix-domain-security.yml, live probes of ionetix.com on 2026-08-23
+standards:
+- id: oauth2
+  conforms: false
+  evidence: >-
+    No oauth2 securityScheme anywhere in the surface; /.well-known/oauth-authorization-server returns 404.
+    Authentication is HTTP Basic (WordPress Application Passwords).
+- id: oidc
+  conforms: false
+  evidence: /.well-known/openid-configuration returns 404.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    Errors are the WordPress WP_Error envelope {code,message,data.status} served as application/json;
+    no application/problem+json response is declared or observed.
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: /.well-known/security.txt returns 404 (control probe confirms the host is not a catch-all).
+- id: rfc8615-well-known
+  conforms: false
+  evidence: No /.well-known/ document of any kind is served.
+- id: rfc8288-web-linking
+  conforms: true
+  evidence: >-
+    Collection responses carry a Link header with rel="next"/"prev", and every wp/v2 resource embeds a
+    HAL-style _links object. Observed on https://ionetix.com/wp-json/wp/v2/posts.
+- id: pagination
+  conforms: true
+  evidence: >-
+    Offset pagination via page/per_page (per_page max 100 declared in the route index) with X-WP-Total
+    and X-WP-TotalPages count headers, plus RFC 8288 Link navigation.
+- id: idempotency
+  conforms: false
+  evidence: >-
+    No Idempotency-Key header, no idempotent-retry semantics, and no dry-run mode anywhere in the
+    WordPress REST surface. No Idempotency pointer is emitted.
+- id: json-schema
+  conforms: true
+  evidence: >-
+    Every wp/v2 collection returns a draft-04 JSON Schema for its resource in response to HTTP OPTIONS;
+    seven were harvested verbatim into json-schema/.
+- id: oembed-1.0
+  conforms: true
+  evidence: >-
+    The oembed/1.0 namespace is registered and /oembed/1.0/embed is served, implementing the oEmbed 1.0
+    provider contract for ionetix.com URLs.
+- id: cors
+  conforms: true
+  evidence: >-
+    Responses carry Access-Control-Allow-Headers and Access-Control-Expose-Headers (X-WP-Total,
+    X-WP-TotalPages, Link), so the content API is browser-callable cross-origin.
+- id: mcp
+  conforms: false
+  evidence: No mcp namespace registered; https://ionetix.com/wp-json/mcp returns 404 rest_no_route.
+- id: a2a
+  conforms: false
+  evidence: /.well-known/agent-card.json and /.well-known/agent.json both return 404.
+domain_standards:
+  market: Radiopharmaceuticals / nuclear medicine / medical imaging
+  candidates_checked:
+  - id: dicom
+    conforms: false
+    evidence: >-
+      No DICOM/DICOMweb (QIDO-RS, WADO-RS, STOW-RS) endpoint is exposed. Ionetix manufactures and
+      delivers the tracer; the PET/CT scanner and its DICOM surface belong to the hospital, not to Ionetix.
+  - id: hl7-fhir
+    conforms: false
+    evidence: No FHIR resource shapes, no /fhir base, no CapabilityStatement.
+  - id: hl7v2
+    conforms: false
+    evidence: No HL7v2 messaging surface published.
+  - id: gs1-edi
+    conforms: false
+    evidence: >-
+      Dose ordering and isotope supply run through contract sales and the contact form; no EDI, ASN or
+      product-catalog interchange is published.
+  finding: >-
+    Ionetix's market DOES have machine-readable standards — DICOM/DICOMweb for the imaging study the
+    N-13 Ammonia dose feeds, HL7 FHIR for the order and result, GS1/EDI for the supply chain — and
+    Ionetix declares none of them in any contract. This is not a scoring penalty (domain-standard
+    conformance is reward-only), but it is the substantive gap: a hospital integrating Ionetix dose
+    scheduling or Ac-225 supply into its own systems has no option but a bilateral, bespoke connector.
+compliance_program:
+  published: false
+  evidence: >-
+    No trust center, no SOC 2 / ISO 27001 / HIPAA / FedRAMP attestation page, no certifications page.
+    probe-security-programs.py returned vdp=none trust=none. Ionetix is an FDA-regulated drug
+    manufacturer (it holds an approved ANDA for Gallium Ga-68 Gozetotide), but that is a regulatory
+    approval for a product, not a published information-security compliance posture, so no Compliance
+    or TrustCenter pointer is emitted.
+note: >-
+  Conformance here is measured against the WordPress content API, the only contract Ionetix serves.
+  Nothing is asserted from a marketing claim; every line cites a probe or a spec location.

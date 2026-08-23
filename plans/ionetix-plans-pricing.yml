@@ -1,0 +1,23 @@
+generated: '2026-08-23'
+method: searched
+source: https://ionetix.com/
+plan_count: 0
+plans: []
+pricing_page: null
+pages_checked:
+- url: https://ionetix.com/cyclotron-solutions/
+  status: 200
+- url: https://ionetix.com/n-13ammonia/
+  status: 200
+- url: https://ionetix.com/contact/
+  status: 200
+commercial_model: >-
+  Ionetix sells N-13 Ammonia doses to hospital PET programs on a stated "pay-by-the-dose" basis,
+  covering the capital and operating cost of the ION-12SC cyclotron it installs on or near the
+  customer campus, and sells Actinium-225 / Astatine-211 under bilateral supply agreements (AlfaRim
+  Medical, Cellectar Biosciences). No dose price, per-curie price, contract tier or rate card is
+  published anywhere on ionetix.com — every commercial path routes to the contact form.
+note: >-
+  plan_count is an honest zero. This is a contract-sales radiopharmaceutical manufacturer, not a
+  self-serve software vendor; there is no pricing page to find, no plan tiers, and no metered quota
+  attached to the WordPress content API profiled here (which is free and anonymous to read).

@@ -1,0 +1,676 @@
+openapi: 3.2.0
+info:
+  title: Ionetix Content API (WordPress REST wp/v2) Comments API
+  version: wp/v2
+  summary: Comment threads attached to ionetix.com posts.
+  description: 'Ionetix publishes ionetix.com on WordPress, which exposes the WordPress REST API at https://ionetix.com/wp-json/.
+    The wp/v2 namespace is anonymously readable and returns the company''s news and careers posts, cardiac-PET /
+    N-13 Ammonia / alpha-therapy product pages, leadership profiles, media library (including the ION-12SC cyclotron
+    data sheet PDFs), taxonomies and a site-wide search endpoint as JSON.
+
+
+    This document was DERIVED mechanically by API Evangelist from the route-discovery document served at https://ionetix.com/wp-json/
+    on 2026-08-23, and from the per-route JSON Schema each collection returns to an HTTP OPTIONS request — every
+    path, method, parameter and schema below is taken verbatim from those descriptors. Ionetix does not publish
+    an OpenAPI definition of its own, and this is not a product API: it is the content API the CMS exposes. Write
+    operations exist on these routes but require authentication (WordPress Application Passwords over HTTP Basic).'
+  contact:
+    name: Ionetix
+    url: https://ionetix.com/contact/
+  x-derived-by: API Evangelist enrichment pipeline
+  x-derived-from: https://ionetix.com/wp-json/
+  x-derived-on: '2026-08-23'
+  x-provider-published: false
+servers:
+- url: https://ionetix.com/wp-json
+  description: Production
+tags:
+- name: Comments
+  description: Comment threads attached to ionetix.com posts.
+paths:
+  /wp/v2/comments:
+    get:
+      operationId: getWpV2Comments
+      summary: GET /wp/v2/comments
+      description: Declared by the ionetix.com WordPress REST route index at https://ionetix.com/wp-json/.
+      tags:
+      - Comments
+      parameters:
+      - name: context
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+        description: Current page of the collection.
+      - name: per_page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 100
+        description: Maximum number of items to be returned in result set.
+      - name: search
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Limit results to those matching a string.
+      - name: after
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Limit response to comments published after a given ISO8601 compliant date.
+      - name: author
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Limit result set to comments assigned to specific user IDs. Requires authorization.
+      - name: author_exclude
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Ensure result set excludes comments assigned to specific user IDs. Requires authorization.
+      - name: author_email
+        in: query
+        required: false
+        schema:
+          type: string
+          format: email
+        description: Limit result set to that from a specific author email. Requires authorization.
+      - name: before
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Limit response to comments published before a given ISO8601 compliant date.
+      - name: exclude
+        in: query
+        required: false
+        schema:
+          type: array
+          default: []
+          items:
+            type: integer
+        description: Ensure result set excludes specific IDs.
+      - name: include
+        in: query
+        required: false
+        schema:
+          type: array
+          default: []
+          items:
+            type: integer
+        description: Limit result set to specific IDs.
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: Offset the result set by a specific number of items.
+      - name: order
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: desc
+        description: Order sort attribute ascending or descending.
+      - name: orderby
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - date
+          - date_gmt
+          - id
+          - include
+          - post
+          - parent
+          - type
+          default: date_gmt
+        description: Sort collection by comment attribute.
+      - name: parent
+        in: query
+        required: false
+        schema:
+          type: array
+          default: []
+          items:
+            type: integer
+        description: Limit result set to comments of specific parent IDs.
+      - name: parent_exclude
+        in: query
+        required: false
+        schema:
+          type: array
+          default: []
+          items:
+            type: integer
+        description: Ensure result set excludes specific parent IDs.
+      - name: post
+        in: query
+        required: false
+        schema:
+          type: array
+          default: []
+          items:
+            type: integer
+        description: Limit result set to comments assigned to specific post IDs.
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+          default: approve
+        description: Limit result set to comments assigned a specific status. Requires authorization.
+      - name: type
+        in: query
+        required: false
+        schema:
+          type: string
+          default: comment
+        description: Limit result set to comments assigned a specific type. Requires authorization.
+      - name: password
+        in: query
+        required: false
+        schema:
+          type: string
+        description: The password for the post if it is password protected.
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/comments'
+        '400':
+          description: Invalid parameter.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authentication required or insufficient capability (rest_forbidden).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: No route or resource found (rest_no_route / rest_post_invalid_id).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: postWpV2Comments
+      summary: POST /wp/v2/comments
+      description: Declared by the ionetix.com WordPress REST route index at https://ionetix.com/wp-json/.
+      tags:
+      - Comments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                author:
+                  type: integer
+                  description: The ID of the user object, if author was a user.
+                author_email:
+                  type: string
+                  format: email
+                  description: Email address for the comment author.
+                author_ip:
+                  type: string
+                  format: ip
+                  description: IP address for the comment author.
+                author_name:
+                  type: string
+                  description: Display name for the comment author.
+                author_url:
+                  type: string
+                  format: uri
+                  description: URL for the comment author.
+                author_user_agent:
+                  type: string
+                  description: User agent for the comment author.
+                content:
+                  type: object
+                  properties:
+                    raw:
+                      description: Content for the comment, as it exists in the database.
+                      type: string
+                      context:
+                      - edit
+                    rendered:
+                      description: HTML content for the comment, transformed for display.
+                      type: string
+                      context:
+                      - view
+                      - edit
+                      - embed
+                      readonly: true
+                  description: The content for the comment.
+                date:
+                  type: string
+                  format: date-time
+                  description: The date the comment was published, in the site's timezone.
+                date_gmt:
+                  type: string
+                  format: date-time
+                  description: The date the comment was published, as GMT.
+                parent:
+                  type: integer
+                  default: 0
+                  description: The ID for the parent of the comment.
+                post:
+                  type: integer
+                  default: 0
+                  description: The ID of the associated post object.
+                status:
+                  type: string
+                  description: State of the comment.
+                meta:
+                  type: object
+                  properties:
+                    _wp_note_status:
+                      type: string
+                      title: ''
+                      description: Note resolution status
+                      default: ''
+                      enum:
+                      - resolved
+                      - reopen
+                  description: Meta fields.
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authentication required or insufficient capability (rest_forbidden).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: No route or resource found (rest_no_route / rest_post_invalid_id).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - applicationPassword: []
+  /wp/v2/comments/{id}:
+    get:
+      operationId: getWpV2CommentsById
+      summary: GET /wp/v2/comments/{id}
+      description: Declared by the ionetix.com WordPress REST route index at https://ionetix.com/wp-json/.
+      tags:
+      - Comments
+      parameters:
+      - &id001
+        name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: WordPress id identifier.
+      - name: context
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      - name: password
+        in: query
+        required: false
+        schema:
+          type: string
+        description: The password for the parent post of the comment (if the post is password protected).
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/comments'
+        '400':
+          description: Invalid parameter.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authentication required or insufficient capability (rest_forbidden).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: No route or resource found (rest_no_route / rest_post_invalid_id).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: postWpV2CommentsById
+      summary: POST /wp/v2/comments/{id}
+      description: Declared by the ionetix.com WordPress REST route index at https://ionetix.com/wp-json/.
+      tags:
+      - Comments
+      parameters:
+      - *id001
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                author:
+                  type: integer
+                  description: The ID of the user object, if author was a user.
+                author_email:
+                  type: string
+                  format: email
+                  description: Email address for the comment author.
+                author_ip:
+                  type: string
+                  format: ip
+                  description: IP address for the comment author.
+                author_name:
+                  type: string
+                  description: Display name for the comment author.
+                author_url:
+                  type: string
+                  format: uri
+                  description: URL for the comment author.
+                author_user_agent:
+                  type: string
+                  description: User agent for the comment author.
+                content:
+                  type: object
+                  properties:
+                    raw:
+                      description: Content for the comment, as it exists in the database.
+                      type: string
+                      context:
+                      - edit
+                    rendered:
+                      description: HTML content for the comment, transformed for display.
+                      type: string
+                      context:
+                      - view
+                      - edit
+                      - embed
+                      readonly: true
+                  description: The content for the comment.
+                date:
+                  type: string
+                  format: date-time
+                  description: The date the comment was published, in the site's timezone.
+                date_gmt:
+                  type: string
+                  format: date-time
+                  description: The date the comment was published, as GMT.
+                parent:
+                  type: integer
+                  description: The ID for the parent of the comment.
+                post:
+                  type: integer
+                  description: The ID of the associated post object.
+                status:
+                  type: string
+                  description: State of the comment.
+                meta:
+                  type: object
+                  properties:
+                    _wp_note_status:
+                      type: string
+                      title: ''
+                      description: Note resolution status
+                      default: ''
+                      enum:
+                      - resolved
+                      - reopen
+                  description: Meta fields.
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authentication required or insufficient capability (rest_forbidden).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: No route or resource found (rest_no_route / rest_post_invalid_id).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - applicationPassword: []
+    delete:
+      operationId: deleteWpV2CommentsById
+      summary: DELETE /wp/v2/comments/{id}
+      description: Declared by the ionetix.com WordPress REST route index at https://ionetix.com/wp-json/.
+      tags:
+      - Comments
+      parameters:
+      - *id001
+      - name: force
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+        description: Whether to bypass Trash and force deletion.
+      - name: password
+        in: query
+        required: false
+        schema:
+          type: string
+        description: The password for the parent post of the comment (if the post is password protected).
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authentication required or insufficient capability (rest_forbidden).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: No route or resource found (rest_no_route / rest_post_invalid_id).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - applicationPassword: []
+components:
+  schemas:
+    Error:
+      type: object
+      description: WordPress REST API error envelope (WP_Error serialization).
+      properties:
+        code:
+          type: string
+          description: Machine-readable error code, e.g. rest_forbidden.
+        message:
+          type: string
+          description: Human-readable message.
+        data:
+          type: object
+          properties:
+            status:
+              type: integer
+      required:
+      - code
+      - message
+    comments:
+      $schema: http://json-schema.org/draft-04/schema#
+      title: comment
+      type: object
+      properties:
+        id:
+          description: Unique identifier for the comment.
+          type: integer
+        author:
+          description: The ID of the user object, if author was a user.
+          type: integer
+        author_email:
+          description: Email address for the comment author.
+          type: string
+          format: email
+        author_ip:
+          description: IP address for the comment author.
+          type: string
+          format: ip
+        author_name:
+          description: Display name for the comment author.
+          type: string
+        author_url:
+          description: URL for the comment author.
+          type: string
+          format: uri
+        author_user_agent:
+          description: User agent for the comment author.
+          type: string
+        content:
+          description: The content for the comment.
+          type: object
+          properties:
+            raw:
+              description: Content for the comment, as it exists in the database.
+              type: string
+            rendered:
+              description: HTML content for the comment, transformed for display.
+              type: string
+        date:
+          description: The date the comment was published, in the site's timezone.
+          type: string
+          format: date-time
+        date_gmt:
+          description: The date the comment was published, as GMT.
+          type: string
+          format: date-time
+        link:
+          description: URL to the comment.
+          type: string
+          format: uri
+        parent:
+          description: The ID for the parent of the comment.
+          type: integer
+          default: 0
+        post:
+          description: The ID of the associated post object.
+          type: integer
+          default: 0
+        status:
+          description: State of the comment.
+          type: string
+        type:
+          description: Type of the comment.
+          type: string
+          default: comment
+        author_avatar_urls:
+          description: Avatar URLs for the comment author.
+          type: object
+          properties:
+            '24':
+              description: Avatar URL with image size of 24 pixels.
+              type: string
+              format: uri
+            '48':
+              description: Avatar URL with image size of 48 pixels.
+              type: string
+              format: uri
+            '96':
+              description: Avatar URL with image size of 96 pixels.
+              type: string
+              format: uri
+        meta:
+          description: Meta fields.
+          type: object
+          properties:
+            _wp_note_status:
+              type: string
+              title: ''
+              description: Note resolution status
+              default: ''
+              enum:
+              - resolved
+              - reopen
+  securitySchemes:
+    applicationPassword:
+      type: http
+      scheme: basic
+      description: WordPress Application Passwords over HTTP Basic. The route index at https://ionetix.com/wp-json/
+        advertises the authorization endpoint https://ionetix.com/wp-admin/authorize-application.php. Read operations
+        on this namespace are anonymous; write operations are not.

@@ -1,0 +1,33 @@
+generated: '2026-08-23'
+method: probed
+source: live GET probes of /.well-known/* on every host in apis.yml and every OpenAPI servers[] host
+hit_count: 0
+hosts:
+- host: https://ionetix.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+soft_404_control:
+  path: /.well-known/zzz-control-probe
+  status: 404
+  bytes: 548
+  note: >-
+    The control probe returns the same 404 the named paths return, so this host is NOT a catch-all
+    that answers 200 for every /.well-known/* path. Every 404 above is a real, trustworthy absence.
+note: >-
+  ionetix.com serves no .well-known discovery surface at all. No WellKnown, SecurityTxt or AgentCard
+  pointer is emitted in apis.yml, because this file records an absence, not a presence. Note that the
+  404 body is a plain nginx/Flywheel 404 (548 bytes) rather than the WordPress theme 404 returned for
+  in-app paths, which confirms the /.well-known/ prefix is handled by the edge and is genuinely unpopulated.

@@ -1,0 +1,100 @@
+generated: '2026-08-23'
+method: derived
+status: candidate
+source: >-
+  openapi/ionetix-*-api-openapi.yml (derived from the https://ionetix.com/wp-json/ route index);
+  MCP discovery probes on 2026-08-23
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: unknown
+  verified: probed
+  probe_date: '2026-08-23'
+  note: >-
+    Nobody ships an MCP server for Ionetix. mode is `none` because the tool list below was DERIVED by
+    API Evangelist from the site's own REST routes — it is a proposal, not a product. No endpoint is
+    named here, because no endpoint exists and guessing one would read as a verified agent surface.
+server: null
+discovery:
+- probe: WordPress MCP Adapter namespace
+  url: https://ionetix.com/wp-json/mcp
+  status: 404
+  body: '{"code":"rest_no_route","message":"No route was found matching the URL and request method.","data":{"status":404}}'
+  finding: >-
+    No `mcp` namespace is registered in the ionetix.com route index. Compare all/enveda-biosciences/,
+    where the same WordPress-only shape DOES register mcp and serves a (gated) adapter endpoint —
+    Ionetix has not installed it.
+- probe: WordPress Abilities API registry
+  url: https://ionetix.com/wp-json/wp-abilities/v1/abilities
+  status: 401
+  body: '{"code":"rest_forbidden","message":"Sorry, you are not allowed to do that.","data":{"status":401}}'
+  finding: >-
+    The wp-abilities/v1 namespace IS registered (routes /abilities, /abilities/{name},
+    /abilities/{name}/run, /categories) but is authentication-gated to anonymous callers. This is the
+    registry a WordPress MCP Adapter would project as tools if one were installed. Its contents could
+    not be enumerated and nothing is inferred from it.
+- probe: OAuth discovery for a hypothetical MCP resource
+  url: https://ionetix.com/.well-known/oauth-authorization-server
+  status: 404
+- probe: OAuth protected resource metadata
+  url: https://ionetix.com/.well-known/oauth-protected-resource
+  status: 404
+- probe: A2A agent card (agent cards frequently point at an MCP endpoint)
+  url: https://ionetix.com/.well-known/agent-card.json
+  status: 404
+tools_note: >-
+  The tools below are CANDIDATES derived one-to-one from operations the ionetix.com WordPress route
+  index actually declares. Only anonymously-readable GET operations are proposed; the write operations
+  in the specs are deliberately excluded, because an MCP server that can delete a taxonomy term
+  irreversibly (see conventions/ionetix-conventions.yml reversibility) is not a safe default surface.
+tools:
+- name: search_ionetix
+  description: Search ionetix.com posts and pages for a term and return id, title, url, type and subtype.
+  source_operation: openapi/ionetix-search-api-openapi.yml#getWpV2Search
+- name: list_news_posts
+  description: >-
+    List Ionetix news releases, case studies, conference listings, presentations, publications and
+    careers postings, filterable by category, tag, author, date range and search string.
+  source_operation: openapi/ionetix-posts-api-openapi.yml#getWpV2Posts
+- name: get_news_post
+  description: Retrieve one Ionetix post by id, with rendered title, excerpt and content.
+  source_operation: openapi/ionetix-posts-api-openapi.yml#getWpV2PostsById
+- name: list_pages
+  description: >-
+    List the ionetix.com page tree — Cardiac PET, N-13 Ammonia, N-13 Ammonia Sites, Actinium-225,
+    Astatine-211, Alpha Therapy, PSMA PET, Cyclotron Solutions, Education, Careers, About and the
+    leadership profiles beneath it.
+  source_operation: openapi/ionetix-pages-api-openapi.yml#getWpV2Pages
+- name: get_page
+  description: Retrieve one ionetix.com page by id.
+  source_operation: openapi/ionetix-pages-api-openapi.yml#getWpV2PagesById
+- name: list_media
+  description: >-
+    List ionetix.com media library items with resolvable source URLs — includes the ION-12SC Cyclotron
+    System data sheet PDFs.
+  source_operation: openapi/ionetix-media-api-openapi.yml#getWpV2Media
+- name: list_categories
+  description: List the content categories used to classify Ionetix posts, with post counts.
+  source_operation: openapi/ionetix-taxonomy-api-openapi.yml#getWpV2Categories
+- name: list_authors
+  description: List the authors publishing content on ionetix.com.
+  source_operation: openapi/ionetix-users-api-openapi.yml#getWpV2Users
+input_schemas: >-
+  Each candidate tool inherits its real input contract from the `parameters` block of its
+  source_operation in openapi/, which was taken verbatim from the ionetix.com route index. No input
+  schema is invented.
+first_party: false
+note: >-
+  This manifest records that Ionetix ships NO agent surface. Emitting it, rather than omitting the
+  directory, is the point: it distinguishes "checked, nothing there, and here is what a server would
+  look like" from "never looked".
+pointer_policy:
+  mcp_server_pointer_emitted: false
+  reason: >-
+    No `MCPServer` pointer is wired in apis.yml. The MCPServer pointer asserts that the PROVIDER serves
+    an MCP endpoint, and Ionetix does not. Wiring it from a derived candidate would award Ionetix the
+    mcp_server_present ergonomics check and the 12-point agent-readiness mcp_server dimension for a
+    surface it has never shipped. Same rule the well-known probe follows: the artifact records the
+    absence, the pointer would claim a presence.

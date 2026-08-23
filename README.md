@@ -64,5 +64,30 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Ionetix is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://forgeglobal.com/ionetix_stock/
+Ionetix (IONETIX Corporation) is a Lansing, Michigan radiopharmaceutical and cyclotron company. It
+built the first commercial compact superconducting cyclotron (ION-12SC) and runs a network of them at
+hospital PET programs to produce N-13 Ammonia for cardiac PET perfusion imaging, sold pay-by-the-dose,
+alongside a Lansing alpha-isotope facility producing Actinium-225 and Astatine-211 for targeted alpha
+therapy.
+
+- Website: https://ionetix.com/
+- News & Events: https://ionetix.com/news-events/
+- Careers: https://ionetix.com/careers/
+
+## What this profile found
+
+**Ionetix publishes no developer platform.** There is no API documentation, no developer portal, no
+SDK, no OpenAPI, no MCP server, no A2A agent card, no `.well-known` surface, no webhooks, no status
+page and no changelog. All of that was probed and recorded, not assumed — see
+`well-known/ionetix-well-known.yml`, `mcp/ionetix-mcp.yml` and `lifecycle/ionetix-lifecycle.yml`.
+
+What ionetix.com *does* serve is a live, anonymously readable **WordPress REST API** at
+`https://ionetix.com/wp-json/`. Its `wp/v2` namespace returns the company newsroom, careers postings,
+conference and case-study archives, product pages, leadership profiles, the media library (including
+the ION-12SC Cyclotron System data sheet PDFs), taxonomies and a site-wide search endpoint as JSON.
+
+The nine OpenAPI documents in `openapi/` were **derived mechanically** by API Evangelist from that
+site's own route-discovery index and from the JSON Schema each collection returns to an HTTP `OPTIONS`
+request — 44 operations, with every path, parameter and schema taken verbatim from those descriptors.
+Ionetix did not author them, and they describe a CMS content API, not a product API: nothing here
+exposes dose ordering, isotope supply, scheduling, cyclotron telemetry or clinical data.

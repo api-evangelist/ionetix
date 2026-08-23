@@ -1,0 +1,26 @@
+generated: '2026-08-23'
+method: derived
+source: openapi/ionetix-comments-api-openapi.yml, openapi/ionetix-discovery-api-openapi.yml,
+  openapi/ionetix-media-api-openapi.yml, openapi/ionetix-oembed-api-openapi.yml, openapi/ionetix-pages-api-openapi.yml,
+  openapi/ionetix-posts-api-openapi.yml, openapi/ionetix-search-api-openapi.yml, openapi/ionetix-taxonomy-api-openapi.yml,
+  openapi/ionetix-users-api-openapi.yml
+summary:
+  types:
+  - http
+schemes:
+- name: applicationPassword
+  type: http
+  scheme: basic
+  description: WordPress Application Passwords over HTTP Basic. The route index at https://ionetix.com/wp-json/
+    advertises the authorization endpoint https://ionetix.com/wp-admin/authorize-application.php.
+    Read operations on this namespace are anonymous; write operations are not.
+  sources:
+  - openapi/ionetix-comments-api-openapi.yml
+  - openapi/ionetix-discovery-api-openapi.yml
+  - openapi/ionetix-media-api-openapi.yml
+  - openapi/ionetix-oembed-api-openapi.yml
+  - openapi/ionetix-pages-api-openapi.yml
+  - openapi/ionetix-posts-api-openapi.yml
+  - openapi/ionetix-search-api-openapi.yml
+  - openapi/ionetix-taxonomy-api-openapi.yml
+  - openapi/ionetix-users-api-openapi.yml

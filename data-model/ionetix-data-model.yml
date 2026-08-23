@@ -1,0 +1,162 @@
+generated: '2026-08-23'
+method: derived
+source: >-
+  json-schema/ionetix-*.schema.json (harvested verbatim via HTTP OPTIONS on each ionetix.com wp/v2
+  collection) and openapi/ionetix-*-api-openapi.yml
+entities:
+- name: post
+  collection: /wp/v2/posts
+  schema: json-schema/ionetix-posts.schema.json
+  id_field: id
+  id_type: integer
+  count_observed: 66
+  key_fields: [id, date, modified, slug, status, link, title, content, excerpt, author,
+    featured_media, categories, tags, comment_status, format, template, meta]
+  description: >-
+    A news release, careers posting, conference listing, case study, presentation or publication on
+    ionetix.com. Carries the theme's rttpg_featured_image_url and rttpg_category convenience fields and
+    Yoast's yoast_head_json SEO block.
+- name: page
+  collection: /wp/v2/pages
+  schema: json-schema/ionetix-pages.schema.json
+  id_field: id
+  id_type: integer
+  count_observed: 29
+  key_fields: [id, date, modified, slug, status, link, title, content, excerpt, author, parent,
+    menu_order, featured_media, template]
+  description: >-
+    A marketing, product, policy or leadership page. Self-referential via `parent` — the leadership
+    profiles (/about/paul-surdez/, /about/jill-wilson/, …) hang off /about/.
+- name: attachment
+  collection: /wp/v2/media
+  schema: json-schema/ionetix-media.schema.json
+  id_field: id
+  id_type: integer
+  count_observed: 291
+  key_fields: [id, date, slug, link, title, author, media_type, mime_type, source_url, alt_text,
+    caption, media_details, post]
+  description: >-
+    A media library item — product and facility photography, leadership portraits, and the ION-12SC
+    Cyclotron System data sheet PDFs. media_details.sizes carries every generated derivative.
+- name: comment
+  collection: /wp/v2/comments
+  schema: json-schema/ionetix-comments.schema.json
+  id_field: id
+  id_type: integer
+  key_fields: [id, post, parent, author, author_name, date, content, status, type]
+- name: category
+  collection: /wp/v2/categories
+  schema: json-schema/ionetix-taxonomy.schema.json
+  id_field: id
+  id_type: integer
+  count_observed: 10
+  key_fields: [id, count, description, link, name, slug, taxonomy, parent, meta]
+  known_terms: [ionetix-news, case-studies, ionetix-conferences, conferences-upcoming,
+    conferences-archive, presentations, publications, ionetix-education, ionetix-careers, uncategorized]
+- name: tag
+  collection: /wp/v2/tags
+  id_field: id
+  id_type: integer
+  key_fields: [id, count, description, link, name, slug, taxonomy, meta]
+- name: user
+  collection: /wp/v2/users
+  schema: json-schema/ionetix-users.schema.json
+  id_field: id
+  id_type: integer
+  count_observed: 5
+  key_fields: [id, name, url, description, link, slug, avatar_urls]
+  description: A content author. Anonymous context exposes name, slug, author-archive link and avatars.
+- name: type
+  collection: /wp/v2/types
+  id_field: slug
+  id_type: string
+  key_fields: [name, slug, rest_base, rest_namespace, taxonomies, hierarchical, has_archive]
+  known_terms: [post, page, attachment, nav_menu_item, wp_block, wp_template, wp_template_part,
+    wp_global_styles, wp_navigation, wp_font_family, wp_font_face]
+- name: taxonomy
+  collection: /wp/v2/taxonomies
+  id_field: slug
+  id_type: string
+  known_terms: [category, post_tag, nav_menu, wp_pattern_category]
+- name: search_result
+  collection: /wp/v2/search
+  schema: json-schema/ionetix-search.schema.json
+  id_field: id
+  key_fields: [id, title, url, type, subtype]
+  description: A denormalized projection over post and page, not a stored entity.
+relationships:
+- from: post
+  to: user
+  kind: belongs_to
+  via: author
+  cardinality: many-to-one
+- from: post
+  to: attachment
+  kind: has_one
+  via: featured_media
+  note: 0 means no featured image.
+- from: post
+  to: category
+  kind: has_many
+  via: categories
+  cardinality: many-to-many
+- from: post
+  to: tag
+  kind: has_many
+  via: tags
+  cardinality: many-to-many
+- from: post
+  to: comment
+  kind: has_many
+  via: comment.post
+- from: page
+  to: page
+  kind: belongs_to
+  via: parent
+  note: Self-referential hierarchy; 0 is a root page.
+- from: page
+  to: user
+  kind: belongs_to
+  via: author
+- from: page
+  to: attachment
+  kind: has_one
+  via: featured_media
+- from: attachment
+  to: post
+  kind: belongs_to
+  via: post
+  note: The post or page the file was uploaded to; 0 when unattached.
+- from: comment
+  to: comment
+  kind: belongs_to
+  via: parent
+  note: Threading; 0 is a top-level comment.
+- from: comment
+  to: post
+  kind: belongs_to
+  via: post
+- from: category
+  to: category
+  kind: belongs_to
+  via: parent
+  note: Categories are hierarchical; tags are not.
+- from: taxonomy
+  to: type
+  kind: has_many
+  via: types
+id_conventions:
+  scheme: opaque positive integers assigned by WordPress, unique per post-type table
+  prefixes: none
+  note: >-
+    Post and page ids share one sequence (both are `post` rows), so an id is only meaningful together
+    with its collection. Terms (categories, tags) use a separate sequence and can collide numerically
+    with post ids.
+traversal:
+  _links: >-
+    Every resource embeds a HAL-style _links object naming its author, replies, wp:featuredmedia,
+    wp:attachment and wp:term relations. Adding ?_embed inlines those resources, which is the cheapest
+    way for an agent to resolve the graph above in one request instead of N.
+note: >-
+  This is the CMS content graph behind ionetix.com. It carries no clinical, dose, isotope-supply,
+  cyclotron-telemetry or order data — Ionetix exposes none of that through any public interface.

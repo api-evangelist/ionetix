@@ -1,0 +1,37 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Ionetix Media API
+  version: 1.0.0
+extends: openapi/ionetix-media-api-openapi.yml
+x-generated: '2026-08-23'
+x-method: generated
+x-source: API Evangelist enrichment pipeline; enhancements over the spec derived from https://ionetix.com/wp-json/
+actions:
+- target: $.info
+  update:
+    x-apievangelist-profile: https://apis.io/providers/ionetix/
+    x-apievangelist-repository: https://github.com/api-evangelist/ionetix
+    x-apievangelist-artifacts:
+      conventions: conventions/ionetix-conventions.yml
+      errors: errors/ionetix-problem-types.yml
+      authentication: authentication/ionetix-authentication.yml
+      data-model: data-model/ionetix-data-model.yml
+      examples: examples/ionetix-examples.yml
+      rate-limits: rate-limits/ionetix-rate-limits.yml
+    x-provider-published-contract: false
+    x-contract-origin: Derived by API Evangelist from the WordPress REST route index at https://ionetix.com/wp-json/
+      and the per-route JSON Schema returned to HTTP OPTIONS. Ionetix publishes no API documentation.
+- target: $.info
+  update:
+    x-agent-notes:
+      anonymous_read: true
+      write_requires_auth: WordPress Application Passwords over HTTP Basic
+      idempotency: none — a retried write creates a duplicate
+      error_format: WordPress WP_Error JSON, not RFC 9457 problem+json
+      pacing: 'robots.txt sets Crawl-delay: 3 and disallows query-string URLs; no rate-limit headers are returned'
+      reversibility: see conventions/ionetix-conventions.yml — taxonomy term deletion is irreversible by the contract's
+        own wording
+- target: $.servers[?(@.url=='https://ionetix.com/wp-json')]
+  update:
+    x-verified: '2026-08-23'
+    x-verified-status: 200

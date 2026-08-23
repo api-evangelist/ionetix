@@ -1,0 +1,87 @@
+generated: '2026-08-23'
+method: derived
+source: >-
+  openapi/ionetix-*-api-openapi.yml 4xx responses, derived in turn from the WordPress REST route index
+  at https://ionetix.com/wp-json/; error codes confirmed against live anonymous probes on 2026-08-23
+format: wp-error
+format_note: >-
+  NOT RFC 9457. The WordPress REST API returns application/json (never application/problem+json) with a
+  WP_Error envelope of {code, message, data:{status, ...}}. There is no `type` URI, no `title`, no
+  `detail` and no `instance`, so an agent written against Problem Details will not parse these.
+envelope:
+  media_type: application/json
+  fields:
+  - name: code
+    type: string
+    description: Machine-readable error slug, e.g. rest_forbidden.
+  - name: message
+    type: string
+    description: Human-readable message, localized to the site language.
+  - name: data.status
+    type: integer
+    description: HTTP status repeated inside the body.
+  - name: data.params
+    type: object
+    description: Present on rest_invalid_param; maps the offending parameter name to its complaint.
+problems:
+- status: 401
+  code: rest_forbidden
+  title: Authentication required or insufficient capability
+  detail: Returned to anonymous callers on any gated route.
+  observed: true
+  observed_at: https://ionetix.com/wp-json/wp-abilities/v1/abilities
+  observed_body: '{"code":"rest_forbidden","message":"Sorry, you are not allowed to do that.","data":{"status":401}}'
+  remediation: >-
+    Authenticate with a WordPress Application Password over HTTP Basic. Read access to wp/v2 content
+    routes does not require this; write access and the wp-abilities/v1 registry do.
+- status: 404
+  code: rest_no_route
+  title: No route was found matching the URL and request method
+  detail: Returned when the path is not a registered REST route in any namespace.
+  observed: true
+  observed_at: https://ionetix.com/wp-json/mcp
+  observed_body: '{"code":"rest_no_route","message":"No route was found matching the URL and request method.","data":{"status":404}}'
+  remediation: Enumerate valid routes from the namespace index at https://ionetix.com/wp-json/.
+- status: 404
+  code: rest_post_invalid_id
+  title: Invalid post ID
+  detail: Returned by single-resource GET/PUT/DELETE when the id does not resolve.
+  observed: false
+  source_operation: openapi/ionetix-posts-api-openapi.yml#getWpV2PostsById
+- status: 400
+  code: rest_invalid_param
+  title: Invalid parameter
+  detail: >-
+    Returned when a query parameter fails the type/enum/minimum/maximum constraint declared for it in
+    the route index — for example per_page above its declared maximum of 100, or context outside
+    [view, embed, edit].
+  observed: false
+  source_operation: openapi/ionetix-posts-api-openapi.yml#getWpV2Posts
+- status: 400
+  code: rest_missing_callback_param
+  title: Missing required parameter
+  detail: Returned when a parameter marked required in the route index is absent (e.g. url on oembed).
+  observed: false
+  source_operation: openapi/ionetix-oembed-api-openapi.yml#getOembedEmbed
+- status: 401
+  code: rest_cannot_create
+  title: Not allowed to create the resource
+  detail: Returned to unauthenticated POST on wp/v2 content collections.
+  observed: false
+  source_operation: openapi/ionetix-posts-api-openapi.yml#postWpV2Posts
+- status: 401
+  code: rest_cannot_edit
+  title: Not allowed to edit the resource
+  detail: Returned to unauthenticated POST/PUT on a single wp/v2 resource.
+  observed: false
+  source_operation: openapi/ionetix-posts-api-openapi.yml#postWpV2PostsById
+- status: 401
+  code: rest_cannot_delete
+  title: Not allowed to delete the resource
+  detail: Returned to unauthenticated DELETE on a single wp/v2 resource.
+  observed: false
+  source_operation: openapi/ionetix-posts-api-openapi.yml#deleteWpV2PostsById
+note: >-
+  Ionetix publishes no error reference, because it publishes no API documentation. Every code above is
+  either observed live on ionetix.com or is a WordPress core REST code reachable from an operation the
+  ionetix.com route index declares. Nothing here is invented.

@@ -1,0 +1,45 @@
+generated: '2026-08-23'
+method: probed
+source: >-
+  live unauthenticated responses from https://ionetix.com/wp-json/wp/v2/* on 2026-08-23, plus
+  https://ionetix.com/robots.txt
+limit_count: 0
+rate_limits: []
+response_headers_observed:
+- header: X-WP-Total
+  meaning: Total items in the collection matching the query (pagination, not rate limiting).
+- header: X-WP-TotalPages
+  meaning: Total pages at the requested per_page size.
+- header: Link
+  meaning: RFC 8288 rel="next"/"prev" pagination links.
+- header: X-Cacheable
+  meaning: Flywheel/Fastly edge cacheability flag (observed value YES).
+rate_limit_headers:
+  x_ratelimit: absent
+  ratelimit_rfc9331: absent
+  retry_after: not observed
+exhaustion_status: not observed
+edge:
+  provider: Flywheel (WP Engine) fronted by Fastly
+  evidence: 'response headers server: Flywheel/5.1.0, x-fw-server, x-served-by: cache-ewr-*, fastly-restarts'
+  note: >-
+    An undocumented edge/WAF throttle almost certainly exists at the Fastly/Flywheel layer, but it is
+    not advertised in any response header and was not triggered by this profiling run, so nothing is
+    asserted about its shape.
+crawl_guidance:
+  source: https://ionetix.com/robots.txt
+  status: 200
+  crawl_delay_seconds: 3
+  disallow:
+  - /calendar/action*
+  - /events/action*
+  - /cdn-cgi*
+  - '/*?'
+  note: >-
+    robots.txt sets Crawl-delay: 3 and disallows any URL bearing a query string ("/*?"). That last rule
+    formally covers every paginated or filtered wp/v2 request, so a well-behaved crawler is told not to
+    call the content API with parameters at all. This is the only published pacing signal Ionetix gives.
+note: >-
+  limit_count is an honest zero: Ionetix documents no rate limits because it documents no API. The
+  wp/v2 surface returns no RateLimit-* or X-RateLimit-* headers and no Retry-After was observed.
+  An agent has no runtime rate-limit signal here and should pace itself from robots.txt Crawl-delay.

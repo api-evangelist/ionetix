@@ -1,0 +1,284 @@
+generated: '2026-08-23'
+method: probed
+source: live anonymous GET requests to https://ionetix.com/wp-json/wp/v2/* on 2026-08-23
+note: 'Every payload below was fetched live and unauthenticated from ionetix.com and is reproduced as returned,
+  with only the bulky rendered `content`, `_links` and Yoast `yoast_head*` blocks removed for size and long strings
+  truncated with an ellipsis. Nothing is synthesized. These are the real shapes an agent will receive, which is
+  what makes them worth keeping: Ionetix publishes no examples of its own because it publishes no documentation.'
+examples:
+- name: posts
+  operation: openapi/ionetix-posts-api-openapi.yml#getWpV2Posts
+  request: GET /wp/v2/posts?per_page=1&_fields=id,date,slug,link,title,excerpt,categories,tags,author,featured_media
+  description: A news post with its taxonomy and author references — note _fields sparse selection in use.
+  status: 200
+  media_type: application/json
+  response:
+  - id: 4792
+    date: '2026-08-17T20:01:42'
+    slug: ionetix-appoints-paul-surdez-as-head-of-investor-relations
+    link: https://ionetix.com/2026/08/17/ionetix-appoints-paul-surdez-as-head-of-investor-relations/
+    title:
+      rendered: Ionetix Appoints Paul Surdez as Head of Investor Relations
+    excerpt:
+      rendered: '<p>– New role supports Ionetix’s transition to the public markets  [&#8230;]</p>
+
+        '
+      protected: false
+    author: 7
+    featured_media: 4795
+    categories:
+    - 11
+    tags: []
+- name: pages
+  operation: openapi/ionetix-pages-api-openapi.yml#getWpV2Pages
+  request: GET /wp/v2/pages?per_page=1&_fields=id,slug,link,title,parent
+  description: A page with its parent reference, showing the self-referential page hierarchy.
+  status: 200
+  media_type: application/json
+  response:
+  - id: 4789
+    slug: paul-surdez
+    link: https://ionetix.com/about/paul-surdez/
+    title:
+      rendered: Paul Surdez
+    parent: 231
+- name: media
+  operation: openapi/ionetix-media-api-openapi.yml#getWpV2Media
+  request: GET /wp/v2/media?per_page=1&_fields=id,date,slug,link,title,media_type,mime_type,source_url
+  description: A media library item with its resolvable source_url.
+  status: 200
+  media_type: application/json
+  response:
+  - id: 4802
+    date: '2026-08-18T19:59:56'
+    slug: surdez-portrait-sized
+    link: https://ionetix.com/about/surdez-portrait-sized/
+    title:
+      rendered: surdez-portrait-sized
+    media_type: image
+    mime_type: image/jpeg
+    source_url: https://ionetix.com/wp-content/uploads/2026/08/surdez-portrait-sized.jpg
+- name: categories
+  operation: openapi/ionetix-taxonomy-api-openapi.yml#getWpV2Categories
+  request: GET /wp/v2/categories?per_page=2
+  description: Content categories with their post counts.
+  status: 200
+  media_type: application/json
+  response:
+  - id: 13
+    count: 3
+    link: https://ionetix.com/ionetix-careers/
+    name: Careers
+    slug: ionetix-careers
+    taxonomy: category
+    parent: 0
+    meta: []
+  - id: 33
+    count: 11
+    link: https://ionetix.com/ionetix-education/case-studies/
+    name: Case Studies
+    slug: case-studies
+    taxonomy: category
+    parent: 12
+    meta: []
+- name: tags
+  operation: openapi/ionetix-taxonomy-api-openapi.yml#getWpV2Tags
+  request: GET /wp/v2/tags?per_page=2
+  description: Content tags.
+  status: 200
+  media_type: application/json
+  response:
+  - id: 29
+    count: 15
+    link: https://ionetix.com/tag/2022-conferences/
+    name: 2022 Conferences
+    slug: 2022-conferences
+    taxonomy: post_tag
+    meta: []
+  - id: 30
+    count: 3
+    link: https://ionetix.com/tag/2023-conferences-active/
+    name: 2023 Conferences Active
+    slug: 2023-conferences-active
+    taxonomy: post_tag
+    meta: []
+- name: users
+  operation: openapi/ionetix-users-api-openapi.yml#getWpV2Users
+  request: GET /wp/v2/users?per_page=1
+  description: An author record as exposed anonymously.
+  status: 200
+  media_type: application/json
+  response:
+  - id: 10
+    name: Ash Harris
+    url: ''
+    link: https://ionetix.com/author/ashharris/
+    slug: ashharris
+    avatar_urls:
+      '24': https://secure.gravatar.com/avatar/30758bbebbf032381370af35d20034e25f9199524f0e3ead26e304bcb91531ea?s=24&d=mm&r=g
+      '48': https://secure.gravatar.com/avatar/30758bbebbf032381370af35d20034e25f9199524f0e3ead26e304bcb91531ea?s=48&d=mm&r=g
+      '96': https://secure.gravatar.com/avatar/30758bbebbf032381370af35d20034e25f9199524f0e3ead26e304bcb91531ea?s=96&d=mm&r=g
+    meta: []
+- name: search
+  operation: openapi/ionetix-search-api-openapi.yml#getWpV2Search
+  request: GET /wp/v2/search?search=actinium&per_page=2
+  description: Site-wide search results — the denormalized projection over posts and pages.
+  status: 200
+  media_type: application/json
+  response:
+  - id: 4462
+    title: IONETIX Corporation and AlfaRim Medical B.V. announce a strategic partnership to fast-track commercial
+      production of Actinium-225
+    url: https://ionetix.com/2025/06/20/ionetix-corporation-and-alfarim-medical-b-v-announce-a-strategic-partnership-to-fast-track-commercial-production-of-actinium-225/
+    type: post
+    subtype: post
+  - id: 4211
+    title: Actinium 225
+    url: https://ionetix.com/actinium-225/
+    type: post
+    subtype: page
+- name: types
+  operation: openapi/ionetix-discovery-api-openapi.yml#getWpV2Types
+  request: GET /wp/v2/types
+  description: Registered content types on ionetix.com.
+  status: 200
+  media_type: application/json
+  response:
+    post:
+      hierarchical: false
+      has_archive: false
+      name: Posts
+      slug: post
+      icon: dashicons-admin-post
+      taxonomies:
+      - category
+      - post_tag
+      rest_base: posts
+      rest_namespace: wp/v2
+      template: []
+      template_lock: false
+    page:
+      hierarchical: true
+      has_archive: false
+      name: Pages
+      slug: page
+      icon: dashicons-admin-page
+      taxonomies: []
+      rest_base: pages
+      rest_namespace: wp/v2
+      template: []
+      template_lock: false
+    attachment:
+      hierarchical: false
+      has_archive: false
+      name: Media
+      slug: attachment
+      icon: dashicons-admin-media
+      taxonomies: []
+      rest_base: media
+      rest_namespace: wp/v2
+      template: []
+      template_lock: false
+    nav_menu_item:
+      hierarchical: false
+      has_archive: false
+      name: Navigation Menu Items
+      slug: nav_menu_item
+      icon: null
+      taxonomies:
+      - nav_menu
+      rest_base: menu-items
+      rest_namespace: wp/v2
+      template: []
+      template_lock: false
+    wp_block:
+      hierarchical: false
+      has_archive: false
+      name: Patterns
+      slug: wp_block
+      icon: null
+      taxonomies:
+      - wp_pattern_category
+      rest_base: blocks
+      rest_namespace: wp/v2
+      template: []
+      template_lock: false
+    wp_template:
+      hierarchical: false
+      has_archive: false
+      name: Templates
+      slug: wp_template
+      icon: null
+      taxonomies: []
+      rest_base: templates
+      rest_namespace: wp/v2
+      template: []
+      template_lock: false
+    wp_template_part:
+      hierarchical: false
+      has_archive: false
+      name: Template Parts
+      slug: wp_template_part
+      icon: null
+      taxonomies: []
+      rest_base: template-parts
+      rest_namespace: wp/v2
+      template: []
+      template_lock: false
+    wp_global_styles:
+      hierarchical: false
+      has_archive: false
+      name: Global Styles
+      slug: wp_global_styles
+      icon: null
+      taxonomies: []
+      rest_base: global-styles
+      rest_namespace: wp/v2
+      template: []
+      template_lock: false
+    wp_navigation:
+      hierarchical: false
+      has_archive: false
+      name: Navigation Menus
+      slug: wp_navigation
+      icon: null
+      taxonomies: []
+      rest_base: navigation
+      rest_namespace: wp/v2
+      template: []
+      template_lock: false
+    wp_font_family:
+      hierarchical: false
+      has_archive: false
+      name: Font Families
+      slug: wp_font_family
+      icon: null
+      taxonomies: []
+      rest_base: font-families
+      rest_namespace: wp/v2
+      template: []
+      template_lock: false
+    wp_font_face:
+      hierarchical: false
+      has_archive: false
+      name: Font Faces
+      slug: wp_font_face
+      icon: null
+      taxonomies: []
+      rest_base: font-families/(?P<font_family_id>[\d]+)/font-faces
+      rest_namespace: wp/v2
+      template: []
+      template_lock: false
+- name: statuses
+  operation: openapi/ionetix-discovery-api-openapi.yml#getWpV2Statuses
+  request: GET /wp/v2/statuses
+  description: Registered post statuses.
+  status: 200
+  media_type: application/json
+  response:
+    publish:
+      name: Published
+      public: true
+      queryable: true
+      slug: publish
+      date_floating: false
