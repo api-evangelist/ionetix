@@ -179,6 +179,9 @@ apis:
   humanURL: https://ionetix.com/about/
   baseURL: https://ionetix.com/wp-json
   tags:
+  - User
+  - Content
+  tags_raw:
   - Users
   - Content
   properties:
