@@ -96,9 +96,9 @@ apis:
 - aid: ionetix:ionetix-pages-api
   name: Ionetix Pages API
   description: >-
-    The ionetix.com marketing and product page tree — Cardiac PET, N-13 Ammonia, N-13 Ammonia Sites,
-    Actinium-225, Astatine-211, Alpha Therapy, PSMA PET, Cyclotron Solutions, Education, Careers,
-    About and leadership profiles — served as JSON by the WordPress REST wp/v2 namespace.
+    The ionetix.com marketing and product page tree — Cardiac PET, N-13 Ammonia, N-13 Ammonia Sites, Actinium-225,
+    Astatine-211, Alpha Therapy, PSMA PET, Cyclotron Solutions, Education, Careers, About and leadership
+    profiles — served as JSON by the WordPress REST wp/v2 namespace.
   humanURL: https://ionetix.com/
   baseURL: https://ionetix.com/wp-json
   tags:
@@ -188,8 +188,8 @@ apis:
 - aid: ionetix:ionetix-users-api
   name: Ionetix Users API
   description: >-
-    The authors publishing content on ionetix.com, exposed anonymously by the WordPress REST wp/v2
-    namespace with name, slug, author archive link and avatar URLs.
+    The authors publishing content on ionetix.com, exposed anonymously by the WordPress REST wp/v2 namespace
+    with name, slug, author archive link and avatar URLs.
   humanURL: https://ionetix.com/about/
   baseURL: https://ionetix.com/wp-json
   tags:
@@ -246,20 +246,16 @@ apis:
     url: overlays/ionetix-discovery-overlay.yaml
   - type: ErrorCatalog
     url: errors/ionetix-problem-types.yml
-- aid: ionetix:ionetix-oembed-api
-  name: Ionetix oEmbed API
-  description: >-
-    oEmbed 1.0 discovery for ionetix.com URLs, returning embeddable representations of posts and pages.
-  humanURL: https://ionetix.com/
+- aid: ionetix:ionetix-o-embed-api
+  name: Ionetix o Embed API
+  description: oEmbed 1.0 discovery for ionetix.com URLs.
+  humanURL: https://ionetix.com/news-events/
   baseURL: https://ionetix.com/wp-json
   tags:
-  - oEmbed
-  - Content
+  - o Embed
   properties:
   - type: OpenAPI
-    url: openapi/ionetix-oembed-api-openapi.yml
-  - type: Overlay
-    url: overlays/ionetix-oembed-overlay.yaml
+    url: openapi/ionetix-o-embed-api-openapi.yml
   - type: ErrorCatalog
     url: errors/ionetix-problem-types.yml
 maintainers:
@@ -268,6 +264,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/ionetix-oembed-overlay.yaml
 - type: Website
   url: https://ionetix.com/
 - type: Blog
