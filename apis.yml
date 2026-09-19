@@ -252,6 +252,8 @@ apis:
   humanURL: https://ionetix.com/news-events/
   baseURL: https://ionetix.com/wp-json
   tags:
+  - oEmbed
+  tags_raw:
   - o Embed
   properties:
   - type: OpenAPI
