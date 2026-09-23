@@ -3,17 +3,7 @@ info:
   title: Ionetix Content API (WordPress REST wp/v2) Search API
   version: wp/v2
   summary: Site-wide search across ionetix.com posts and pages.
-  description: 'Ionetix publishes ionetix.com on WordPress, which exposes the WordPress REST API at https://ionetix.com/wp-json/.
-    The wp/v2 namespace is anonymously readable and returns the company''s news and careers posts, cardiac-PET /
-    N-13 Ammonia / alpha-therapy product pages, leadership profiles, media library (including the ION-12SC cyclotron
-    data sheet PDFs), taxonomies and a site-wide search endpoint as JSON.
-
-
-    This document was DERIVED mechanically by API Evangelist from the route-discovery document served at https://ionetix.com/wp-json/
-    on 2026-08-23, and from the per-route JSON Schema each collection returns to an HTTP OPTIONS request — every
-    path, method, parameter and schema below is taken verbatim from those descriptors. Ionetix does not publish
-    an OpenAPI definition of its own, and this is not a product API: it is the content API the CMS exposes. Write
-    operations exist on these routes but require authentication (WordPress Application Passwords over HTTP Basic).'
+  description: Ionetix publishes ionetix.com on WordPress, which exposes the WordPress REST API at https://ionetix.com/wp-json/.
   contact:
     name: Ionetix
     url: https://ionetix.com/contact/
@@ -196,6 +186,4 @@ components:
     applicationPassword:
       type: http
       scheme: basic
-      description: WordPress Application Passwords over HTTP Basic. The route index at https://ionetix.com/wp-json/
-        advertises the authorization endpoint https://ionetix.com/wp-admin/authorize-application.php. Read operations
-        on this namespace are anonymous; write operations are not.
+      description: WordPress Application Passwords over HTTP Basic. The route index at https://ionetix.com/wp-json/ advertises the authorization endpoint https://ionetix.com/wp-admin/authorize-application.php. Read operations on this namespace are anonymous; write operations are not.
