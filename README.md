@@ -64,30 +64,117 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Ionetix (IONETIX Corporation) is a Lansing, Michigan radiopharmaceutical and cyclotron company. It
-built the first commercial compact superconducting cyclotron (ION-12SC) and runs a network of them at
-hospital PET programs to produce N-13 Ammonia for cardiac PET perfusion imaging, sold pay-by-the-dose,
-alongside a Lansing alpha-isotope facility producing Actinium-225 and Astatine-211 for targeted alpha
-therapy.
+Ionetix (IONETIX Corporation) is a Lansing, Michigan radiopharmaceutical and cyclotron company founded in 2009 out of technology developed at the MIT Plasma Science and Fusion Center. It built the first commercial compact superconducting cyclotron, the ION-12SC, and operates a distributed network of those cyclotrons installed on or near the campuses of hospital PET programs to produce N-13 Ammonia, a short-half-life PET tracer used for cardiac perfusion imaging and the detection of coronary artery disease, sold to providers on a pay-by-the-dose basis. Alongside the cardiac PET network the company runs an alpha isotope manufacturing facility in Lansing built around a 30 MeV cyclotron for commercial-scale production of Actinium-225 and Astatine-211 for targeted alpha therapy, has an approved ANDA for Gallium Ga-68 Gozetotide (PSMA-11), and supply and development partnerships with AlfaRim Medical and Cellectar Biosciences. Ionetix completed a $30M+ financing and go-public transaction in April 2026. Ionetix publishes no developer platform, no API documentation, no SDK and no developer portal; the only machine-readable surface on ionetix.com is the WordPress REST API at /wp-json/, whose wp/v2 namespace is anonymously readable and serves the company newsroom, careers postings, conference and case-study archives, product pages, leadership profiles, the media library (including the ION-12SC cyclotron data sheet PDFs) and a site-wide search endpoint as JSON. The WordPress Abilities API namespace (wp-abilities/v1) is registered on the site but returns HTTP 401 to anonymous callers, and no MCP namespace is registered.
 
-- Website: https://ionetix.com/
-- News & Events: https://ionetix.com/news-events/
-- Careers: https://ionetix.com/careers/
+**Areas:** Company · Healthcare · Life Sciences · Radiopharmaceuticals · Nuclear Medicine · Medical Imaging · Cardiology · Oncology · Isotopes · Manufacturing
 
-## What this profile found
+## Ionetix on APIs.io
 
-**Ionetix publishes no developer platform.** There is no API documentation, no developer portal, no
-SDK, no OpenAPI, no MCP server, no A2A agent card, no `.well-known` surface, no webhooks, no status
-page and no changelog. All of that was probed and recorded, not assumed — see
-`well-known/ionetix-well-known.yml`, `mcp/ionetix-mcp.yml` and `lifecycle/ionetix-lifecycle.yml`.
+Everything profiled for Ionetix is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/ionetix/](https://apis.io/providers/ionetix/)** — or go straight to one of the APIs or properties below.
 
-What ionetix.com *does* serve is a live, anonymously readable **WordPress REST API** at
-`https://ionetix.com/wp-json/`. Its `wp/v2` namespace returns the company newsroom, careers postings,
-conference and case-study archives, product pages, leadership profiles, the media library (including
-the ION-12SC Cyclotron System data sheet PDFs), taxonomies and a site-wide search endpoint as JSON.
+### APIs (1)
 
-The nine OpenAPI documents in `openapi/` were **derived mechanically** by API Evangelist from that
-site's own route-discovery index and from the JSON Schema each collection returns to an HTTP `OPTIONS`
-request — 44 operations, with every path, parameter and schema taken verbatim from those descriptors.
-Ionetix did not author them, and they describe a CMS content API, not a product API: nothing here
-exposes dose ordering, isotope supply, scheduling, cyclotron telemetry or clinical data.
+- [Ionetix Website (WordPress REST)](https://apis.io/apis/ionetix/ionetix-com-website-wordpress-rest/) — The public WordPress REST API (wp-json) of the Ionetix website at ionetix.com: the route index of the site's content management system, catalogued as one…
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [ionetix-mcp.yml](https://apis.io/servers/ionetix/ionetix-mcp-yml/)
+
+#### JSON Schema (7)
+
+The data models the API reads and writes.
+
+- [Moved to /providers/ionetix/](https://apis.io/schemas/ionetix/ionetix-comments.schema/)
+- [Moved to /providers/ionetix/](https://apis.io/schemas/ionetix/ionetix-media.schema/)
+- [Moved to /providers/ionetix/](https://apis.io/schemas/ionetix/ionetix-pages.schema/)
+- [Moved to /providers/ionetix/](https://apis.io/schemas/ionetix/ionetix-posts.schema/)
+- [Moved to /providers/ionetix/](https://apis.io/schemas/ionetix/ionetix-search.schema/)
+- [Moved to /providers/ionetix/](https://apis.io/schemas/ionetix/ionetix-taxonomy.schema/)
+- [Moved to /providers/ionetix/](https://apis.io/schemas/ionetix/ionetix-users.schema/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Ionetix Authentication](https://apis.io/security/ionetix/ionetix-authentication/)
+- [Ionetix Domain Security](https://apis.io/security/ionetix/ionetix-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Ionetix Plans Pricing](https://apis.io/plans/ionetix/ionetix-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Ionetix Rate Limits](https://apis.io/rate-limits/ionetix/ionetix-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://ionetix.com/)
+- [Support](https://ionetix.com/contact/)
+- [Blog](https://ionetix.com/news-events/)
+- [Privacy policy](https://ionetix.com/privacy-policy/)
+
+## API Evangelist rating
+
+**Kin Score 22.7** — emerging · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 57.1 |
+| Contract quality | 30.5 |
+| Contract governance | 4.5 |
+| Operational transparency | 0.0 |
+| Developer ergonomics | 30.4 |
+| Access clarity | 10.5 |
+
+**Agent readiness 20.9** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | documented (partial credit) |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 16.4** — Health
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/ionetix/](https://apis.io/providers/ionetix/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Ionetix: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/ionetix/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
